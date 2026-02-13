@@ -5,12 +5,6 @@
     <RootNamespace>LogicBuilder.RulesDirector</RootNamespace>
     <PackageId>LogicBuilder.RulesDirector</PackageId>
 		<Authors>BlaiseD</Authors>
-		<LangVersion>latest</LangVersion>
-		<WarningsAsErrors>true</WarningsAsErrors>
-		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
     <Description>LogicBuilder.RulesDirector manages the state of the flow for the Logic Builder, including switching between rule engines, and keeping track of the current location as the rules are evaluated.</Description>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
 		<PackageReleaseNotes>Refactoring to accelerate DevOps.</PackageReleaseNotes>
