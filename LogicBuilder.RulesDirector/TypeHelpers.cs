@@ -49,9 +49,11 @@ namespace LogicBuilder.RulesDirector
             }
         }
 
+        [Obsolete("This method is obsolete. It was used to support the standard forms feature which has been removed from LogicBuilder")]
         internal static bool CanBeAssignedNull(this Type type) 
             => !type.IsValueType || type.IsNullable();
 
+        [Obsolete("This method is obsolete. It was used to support the standard forms feature which has been removed from LogicBuilder")]
         private static Dictionary<Type, HashSet<Type>> NumbersDictionary = new Dictionary<Type, HashSet<Type>>()
         {
             { typeof(decimal), new HashSet<Type> { typeof(byte), typeof(sbyte), typeof(char), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong) } },
@@ -68,6 +70,7 @@ namespace LogicBuilder.RulesDirector
         internal static bool IsNullable(this Type type) 
             => type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
 
+        [Obsolete("This method is obsolete. It was used to support the standard forms feature which has been removed from LogicBuilder")]
         public static bool AssignableFrom(this Type to, Type from)
         {
             if (to.IsAssignableFrom(from))
