@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -10,14 +11,26 @@ namespace LogicBuilder.RulesDirector
         internal static bool TryParse(this string toParse, Type type, out object result)
         {
             if (type == null)
-            {
-                result = null;
-                return false;
-            }
+                throw new ArgumentException("Argument cannot be null.", nameof(type));
+
+            if (!IsLiteralType(type))
+                throw new ArgumentException("Not a valid literal type.", nameof(type));
 
             if (type == typeof(string))
             {
                 result = toParse;
+                return true;
+            }
+
+            if (typeof(Enum).IsAssignableFrom(type))
+            {
+                if (!int.TryParse(toParse, out int _) && !Enum.IsDefined(type, toParse))
+                {
+                    result = null;
+                    return false;
+                }
+
+                result = Enum.Parse(type, toParse);
                 return true;
             }
 
@@ -49,6 +62,7 @@ namespace LogicBuilder.RulesDirector
             }
         }
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("This method is obsolete. It was used to support the standard forms feature which has been removed from LogicBuilder")]
         internal static bool CanBeAssignedNull(this Type type) 
             => !type.IsValueType || type.IsNullable();
@@ -70,6 +84,7 @@ namespace LogicBuilder.RulesDirector
         internal static bool IsNullable(this Type type) 
             => type.IsGenericType && type.GetGenericTypeDefinition().Equals(typeof(Nullable<>));
 
+        [ExcludeFromCodeCoverage]
         [Obsolete("This method is obsolete. It was used to support the standard forms feature which has been removed from LogicBuilder")]
         public static bool AssignableFrom(this Type to, Type from)
         {
@@ -94,5 +109,54 @@ namespace LogicBuilder.RulesDirector
             return from.GetMethods(BindingFlags.Public | BindingFlags.Static).Any(MatchImplicitOperator)
                     || to.GetMethods(BindingFlags.Public | BindingFlags.Static).Any(MatchImplicitOperator);
         }
+
+        private static bool IsLiteralType(Type type)
+        {
+            if (type.IsNullable())
+                type = Nullable.GetUnderlyingType(type);
+
+            return LiteralTypes.Contains(type)
+                || UneferencedLiteralTypes.Contains(type.FullName)
+                || typeof(Enum).IsAssignableFrom(type);
+        }
+
+        private static HashSet<Type> LiteralTypes => [.. _literalTypes];
+
+        private static readonly HashSet<string> UneferencedLiteralTypes =
+        [
+            UnreferencedLiteralTypeNames.DATEONLY,
+            UnreferencedLiteralTypeNames.TIMEONLY,
+            UnreferencedLiteralTypeNames.DATE,
+            UnreferencedLiteralTypeNames.TIMEOFDAY
+        ];
+
+        private struct UnreferencedLiteralTypeNames
+        {
+            public const string DATEONLY = "System.DateOnly";
+            public const string TIMEONLY = "System.TimeOnly";
+            public const string DATE = "Microsoft.OData.Edm.Date";
+            public const string TIMEOFDAY = "Microsoft.OData.Edm.TimeOfDay";
+        }
+
+        private static Type[] _literalTypes => [
+                typeof(bool),
+                typeof(DateTime),
+                typeof(DateTimeOffset),
+                typeof(TimeSpan),
+                typeof(Guid),
+                typeof(decimal),
+                typeof(byte),
+                typeof(short),
+                typeof(int),
+                typeof(long),
+                typeof(float),
+                typeof(double),
+                typeof(char),
+                typeof(sbyte),
+                typeof(ushort),
+                typeof(uint),
+                typeof(ulong),
+                typeof(string)
+            ];
     }
 }
