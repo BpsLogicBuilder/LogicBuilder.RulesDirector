@@ -88,20 +88,11 @@ namespace LogicBuilder.RulesDirector.Tests
         }
 
         [Fact]
-        public void DirectorException_CanBeCaught_AsException()
+        public async System.Threading.Tasks.Task DirectorException_CanBeCaught_AsException()
         {
             //arrange
-            Exception caughtException;
-
             //act
-            try
-            {
-                throw new DirectorException("Test exception");
-            }
-            catch (Exception ex)
-            {
-                caughtException = ex;
-            }
+            DirectorException caughtException = await Assert.ThrowsAsync<DirectorException>(() => throw new DirectorException("Test exception"));
 
             //assert
             Assert.NotNull(caughtException);
