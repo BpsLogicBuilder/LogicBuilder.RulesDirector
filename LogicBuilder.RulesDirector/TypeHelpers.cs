@@ -38,10 +38,10 @@ namespace LogicBuilder.RulesDirector
 
             return success;
 
-            bool IsTryParseMethod(MethodInfo methodLocal)
+            bool IsTryParseMethod(MethodInfo method)
             {
-                if (methodLocal.Name != "TryParse") return false;
-                ParameterInfo[] parameters = methodLocal.GetParameters();
+                if (method.Name != "TryParse") return false;
+                ParameterInfo[] parameters = method.GetParameters();
                 return parameters.Length == 2
                     && parameters[0].ParameterType == typeof(string)
                     && parameters[1].IsOut
