@@ -10,6 +10,8 @@
             }
             catch
             {
+                // If an exception is thrown, the email is not valid
+                // Intentionally catch all exceptions to return false for any invalid email format
                 return false;
             }
         }
