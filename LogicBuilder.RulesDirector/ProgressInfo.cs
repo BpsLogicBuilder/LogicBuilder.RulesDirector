@@ -4,17 +4,12 @@ using System.Globalization;
 namespace LogicBuilder.RulesDirector
 {
     [Serializable]
-    public class ProgressInfo : IEquatable<ProgressInfo>, IComparable<ProgressInfo>
+    public class ProgressInfo(string description) : IEquatable<ProgressInfo>, IComparable<ProgressInfo>
     {
-        public ProgressInfo(string description)
-        {
-            this.description = description;
-            this.dateAndTime = DateTime.Now;
-        }
 
         #region Variables
-        private string description;
-        private DateTime dateAndTime;
+        private readonly string description = description;
+        private readonly DateTime dateAndTime = DateTime.UtcNow;
         #endregion Variables
 
         #region Properties

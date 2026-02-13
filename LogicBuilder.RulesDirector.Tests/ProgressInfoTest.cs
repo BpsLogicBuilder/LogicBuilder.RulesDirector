@@ -9,11 +9,11 @@ namespace LogicBuilder.RulesDirector.Tests
         {
             //arrange
             string expectedDescription = "Test progress description";
-            DateTime beforeCreation = DateTime.Now;
+            DateTime beforeCreation = DateTime.UtcNow;
 
             //act
             var progressInfo = new ProgressInfo(expectedDescription);
-            DateTime afterCreation = DateTime.Now;
+            DateTime afterCreation = DateTime.UtcNow;
 
             //assert
             Assert.NotNull(progressInfo);
@@ -40,9 +40,9 @@ namespace LogicBuilder.RulesDirector.Tests
         public void DateAndTime_ReturnsCorrectValue()
         {
             //arrange
-            DateTime beforeCreation = DateTime.Now;
+            DateTime beforeCreation = DateTime.UtcNow;
             var progressInfo = new ProgressInfo("Test");
-            DateTime afterCreation = DateTime.Now;
+            DateTime afterCreation = DateTime.UtcNow;
 
             //act
             DateTime actualDateTime = progressInfo.DateAndTime;

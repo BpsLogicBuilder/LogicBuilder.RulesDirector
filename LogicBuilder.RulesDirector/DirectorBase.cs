@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 
 [assembly: CLSCompliant(true)]
@@ -26,51 +25,27 @@ namespace LogicBuilder.RulesDirector
         #region Flow Properties
         //driver
         [CLSCompliant(false)]
-        protected virtual string _driver
-        {
-            get;
-            set;
-        }
+        protected string _driver = string.Empty;
 
         //selection
         [CLSCompliant(false)]
-        protected virtual string _selection
-        {
-            get;
-            set;
-        }
+        protected string _selection = string.Empty;
 
         //callingModuleDriverStack
         [CLSCompliant(false)]
-        protected virtual Stack _callingModuleDriverStack
-        {
-            get;
-            set;
-        }
+        protected Stack _callingModuleDriverStack = new();
 
         //callingModuleStack
         [CLSCompliant(false)]
-        protected virtual Stack _callingModuleStack
-        {
-            get;
-            set;
-        }
+        protected Stack _callingModuleStack = new();
 
         //moduleBeginName
         [CLSCompliant(false)]
-        protected virtual string _moduleBeginName
-        {
-            get;
-            set;
-        }
+        protected string _moduleBeginName = string.Empty;
 
         //moduleEndName
         [CLSCompliant(false)]
-        protected virtual string _moduleEndName
-        {
-            get;
-            set;
-        }
+        protected string _moduleEndName = string.Empty;
         #endregion Flow Properties
 
         #region Rule Activation Properties
@@ -185,7 +160,7 @@ namespace LogicBuilder.RulesDirector
                 if (_driver.Length == 0)
                     return page.ToString(CultureInfo.CurrentCulture);
 
-                string[] driverValues = _driver.Split(new char[] { 'P' });
+                string[] driverValues = _driver.Split(['P']);
                 return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[1];
             }
         }
@@ -201,7 +176,7 @@ namespace LogicBuilder.RulesDirector
                 if (_driver.Length == 0)
                     return page.ToString(CultureInfo.CurrentCulture);
 
-                string[] driverValues = _driver.Split(new char[] { 'P' });
+                string[] driverValues = _driver.Split(['P']);
                 return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[0];
             }
         }
@@ -279,7 +254,7 @@ namespace LogicBuilder.RulesDirector
         private static Stack CopyStack(Stack stack)
         {
             object[] stackArray = stack.ToArray();
-            Stack newStack = new Stack();
+            Stack newStack = new();
             for (int i = stackArray.Length - 1; i > -1; i--)
                 newStack.Push(stackArray[i]);
 

@@ -14,7 +14,7 @@ namespace LogicBuilder.RulesDirector
         #endregion Constants
 
         #region Variables
-        private Collection<ProgressInfo> progressItems = new Collection<ProgressInfo>();
+        private readonly Collection<ProgressInfo> progressItems = [];
         public event EventHandler ItemAdded;
         public event EventHandler ListCleared;
         #endregion Variables
@@ -29,7 +29,7 @@ namespace LogicBuilder.RulesDirector
         #region Methods
         internal void AddProgressItem(string description)
         {
-            ProgressInfo progressInfo = new ProgressInfo(description);
+            ProgressInfo progressInfo = new(description);
             progressItems.Add(progressInfo);
 
             RaiseItemAdded(progressInfo);

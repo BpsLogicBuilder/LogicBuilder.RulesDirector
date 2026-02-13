@@ -1,25 +1,11 @@
 ﻿using LogicBuilder.Workflow.Activities.Rules;
 using System;
-using System.Collections;
 using System.Globalization;
 
 namespace LogicBuilder.RulesDirector
 {
     abstract public class AppDirectorBase : DirectorBase
     {
-        #region Private Properties
-        protected sealed override string _driver { get; set; } = string.Empty;
-
-        protected sealed override string _selection { get; set; } = string.Empty;
-
-        protected sealed override Stack _callingModuleDriverStack { get; set; } = new Stack();
-
-        protected sealed override Stack _callingModuleStack { get; set; } = new Stack();
-
-        protected sealed override string _moduleBeginName { get; set; } = string.Empty;
-
-        protected sealed override string _moduleEndName { get; set; } = string.Empty;
-        #endregion Private Properties
 
         #region Properties
         /// This property is used by the auto-generated rules and should
@@ -42,10 +28,7 @@ namespace LogicBuilder.RulesDirector
 
                     UpdateProgressList();
 
-                    RuleEngine ruleEngine = RulesCache.GetRuleEngine(_moduleBeginName);
-                    if (ruleEngine == null)
-                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, _moduleBeginName));
-
+                    RuleEngine ruleEngine = RulesCache.GetRuleEngine(_moduleBeginName) ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, _moduleBeginName));
                     ruleEngine.Execute(this.FlowActivity);
                 }
             }
@@ -70,10 +53,7 @@ namespace LogicBuilder.RulesDirector
 
                     UpdateProgressList();
 
-                    RuleEngine ruleEngine = RulesCache.GetRuleEngine(_moduleBeginName);
-                    if (ruleEngine == null)
-                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, _moduleBeginName));
-
+                    RuleEngine ruleEngine = RulesCache.GetRuleEngine(_moduleBeginName) ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, _moduleBeginName));
                     ruleEngine.Execute(this.FlowActivity);
                 }
             }
@@ -86,17 +66,9 @@ namespace LogicBuilder.RulesDirector
         /// </summary>
         public sealed override void ExecuteRulesEngine()
         {
-            _executeRulesEngine();
-        }
-
-        private void _executeRulesEngine()
-        {
             UpdateProgressList();
 
-            RuleEngine ruleEngine = RulesCache.GetRuleEngine(_moduleBeginName);
-            if (ruleEngine == null)
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, _moduleBeginName));
-
+            RuleEngine ruleEngine = RulesCache.GetRuleEngine(_moduleBeginName) ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, _moduleBeginName));
             ruleEngine.Execute(this.FlowActivity);
         }
 
@@ -105,11 +77,6 @@ namespace LogicBuilder.RulesDirector
         /// </summary>
         public sealed override void StartInitialFlow(string module)
         {
-            _startInitialFlow(module);
-        }
-
-        private void _startInitialFlow(string module)
-        {
             if (string.IsNullOrEmpty(module))
                 throw new ArgumentException(Strings.ruleSetCannotBeNull);
 
@@ -117,10 +84,7 @@ namespace LogicBuilder.RulesDirector
 
             UpdateProgressList(module);
 
-            RuleEngine ruleEngine = RulesCache.GetRuleEngine(module);
-            if (ruleEngine == null)
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, module));
-
+            RuleEngine ruleEngine = RulesCache.GetRuleEngine(module) ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.moduleNotFoundFormat, module));
             ruleEngine.Execute(this.FlowActivity);
         }
         #endregion Methods

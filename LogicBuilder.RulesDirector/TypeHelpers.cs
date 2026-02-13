@@ -45,7 +45,7 @@ namespace LogicBuilder.RulesDirector
                 return false;
             }
 
-            object[] args = new object[] { toParse, null };
+            object[] args = [toParse, null];
             bool success = (bool)method.Invoke(null, args);
             result = success ? args[1] : null;
 
@@ -68,7 +68,7 @@ namespace LogicBuilder.RulesDirector
             => !type.IsValueType || type.IsNullable();
 
         [Obsolete("This method is obsolete. It was used to support the standard forms feature which has been removed from LogicBuilder")]
-        private static Dictionary<Type, HashSet<Type>> NumbersDictionary = new Dictionary<Type, HashSet<Type>>()
+        private static readonly Dictionary<Type, HashSet<Type>> NumbersDictionary = new()
         {
             { typeof(decimal), new HashSet<Type> { typeof(byte), typeof(sbyte), typeof(char), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong) } },
             { typeof(double), new HashSet<Type> { typeof(byte), typeof(sbyte), typeof(char), typeof(short), typeof(ushort), typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float) } },
@@ -120,25 +120,7 @@ namespace LogicBuilder.RulesDirector
                 || typeof(Enum).IsAssignableFrom(type);
         }
 
-        private static HashSet<Type> LiteralTypes => [.. _literalTypes];
-
-        private static readonly HashSet<string> UneferencedLiteralTypes =
-        [
-            UnreferencedLiteralTypeNames.DATEONLY,
-            UnreferencedLiteralTypeNames.TIMEONLY,
-            UnreferencedLiteralTypeNames.DATE,
-            UnreferencedLiteralTypeNames.TIMEOFDAY
-        ];
-
-        private struct UnreferencedLiteralTypeNames
-        {
-            public const string DATEONLY = "System.DateOnly";
-            public const string TIMEONLY = "System.TimeOnly";
-            public const string DATE = "Microsoft.OData.Edm.Date";
-            public const string TIMEOFDAY = "Microsoft.OData.Edm.TimeOfDay";
-        }
-
-        private static Type[] _literalTypes => [
+        private static HashSet<Type> LiteralTypes => [
                 typeof(bool),
                 typeof(DateTime),
                 typeof(DateTimeOffset),
@@ -158,5 +140,21 @@ namespace LogicBuilder.RulesDirector
                 typeof(ulong),
                 typeof(string)
             ];
+
+        private static readonly HashSet<string> UneferencedLiteralTypes =
+        [
+            UnreferencedLiteralTypeNames.DATEONLY,
+            UnreferencedLiteralTypeNames.TIMEONLY,
+            UnreferencedLiteralTypeNames.DATE,
+            UnreferencedLiteralTypeNames.TIMEOFDAY
+        ];
+
+        private struct UnreferencedLiteralTypeNames
+        {
+            public const string DATEONLY = "System.DateOnly";
+            public const string TIMEONLY = "System.TimeOnly";
+            public const string DATE = "Microsoft.OData.Edm.Date";
+            public const string TIMEOFDAY = "Microsoft.OData.Edm.TimeOfDay";
+        }
     }
 }

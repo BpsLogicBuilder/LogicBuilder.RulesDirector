@@ -1,7 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 
 namespace LogicBuilder.RulesDirector
 {
@@ -19,12 +17,12 @@ namespace LogicBuilder.RulesDirector
         }
 
         #region Variables
-        private string driver;
-        private string selection;
-        private Stack callingModuleDriverStack;
-        private Stack callingModuleStack;
-        private string moduleBeginName;
-        private string moduleEndName;
+        private readonly string driver;
+        private readonly string selection;
+        private readonly Stack callingModuleDriverStack;
+        private readonly Stack callingModuleStack;
+        private readonly string moduleBeginName;
+        private readonly string moduleEndName;
         #endregion Variables
 
         #region Properties
