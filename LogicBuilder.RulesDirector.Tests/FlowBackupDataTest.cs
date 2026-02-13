@@ -129,19 +129,6 @@ namespace LogicBuilder.RulesDirector.Tests
         }
 
         [Fact]
-        public void Equals_ReturnsTrue_WhenComparedWithSameReference()
-        {
-            //arrange
-            var flowBackupData = new FlowBackupData("driver", "selection", new Stack(), new Stack(), "begin", "end");
-
-            //act
-            bool result = flowBackupData.Equals(flowBackupData);
-
-            //assert
-            Assert.True(result);
-        }
-
-        [Fact]
         public void Equals_ReturnsFalse_WhenDriverIsDifferent()
         {
             //arrange

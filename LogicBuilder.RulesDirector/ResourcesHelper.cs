@@ -10,7 +10,7 @@ namespace LogicBuilder.RulesDirector
             if (director.RulesCache.ResourceStrings.TryGetValue(shortValue, out string longValue))
             {
                 if (!longValue.TryParse(typeof(T), out result))
-                    throw new DirectorException(string.Format(CultureInfo.InvariantCulture, Strings.getResourceFailedInvalidFormat, typeof(T).ToString(), shortValue, longValue));
+                    throw new DirectorException(string.Format(CultureInfo.InvariantCulture, Strings.getResourceFailedInvalidFormat, typeof(T), shortValue, longValue));
             }
             else
             {

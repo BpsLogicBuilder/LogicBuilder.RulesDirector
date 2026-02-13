@@ -88,7 +88,7 @@ namespace LogicBuilder.RulesDirector.Tests
             var progressInfo = new ProgressInfo("Test");
 
             //act & assert
-            Assert.Throws<InvalidOperationException>(() => progressInfo.Equals(null));
+            Assert.Throws<InvalidOperationException>(() => progressInfo?.Equals(null));
         }
 
         [Fact]

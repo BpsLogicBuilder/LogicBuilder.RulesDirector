@@ -4,6 +4,7 @@ using LogicBuilder.RulesDirector;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Text.Json;
+using System.Threading;
 
 namespace Contoso.Test.Flow
 {
@@ -55,7 +56,7 @@ namespace Contoso.Test.Flow
                 stopWatch.Stop();
                 logger.LogInformation("this.Director.StartInitialFlow: {0}", stopWatch.Elapsed.TotalMilliseconds);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (!IsCriticalException(ex))
             {
                 FlowDataCache.Response = new ErrorResponse
                 {
@@ -64,6 +65,14 @@ namespace Contoso.Test.Flow
                 };
                 logger.LogWarning(0, string.Format("Progress Start {0}", JsonSerializer.Serialize(this.Progress)));
                 this.logger.LogError(ex, ex.Message);
+            }
+
+            static bool IsCriticalException(Exception ex)
+            {
+                return ex is OutOfMemoryException
+                    or ThreadAbortException
+                    or StackOverflowException
+                    or ThreadInterruptedException;
             }
         }
     }

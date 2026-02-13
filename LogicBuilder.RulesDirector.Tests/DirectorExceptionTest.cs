@@ -1,7 +1,4 @@
 using System;
-using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
-using Xunit;
 
 namespace LogicBuilder.RulesDirector.Tests
 {
@@ -136,22 +133,13 @@ namespace LogicBuilder.RulesDirector.Tests
         public void DirectorException_PreservesStackTrace()
         {
             //arrange
-            DirectorException? caughtException = null;
-
             //act
-            try
-            {
-                ThrowDirectorException();
-            }
-            catch (DirectorException ex)
-            {
-                caughtException = ex;
-            }
+            DirectorException caughtException = Assert.Throws<DirectorException>(ThrowDirectorException);
 
             //assert
             Assert.NotNull(caughtException);
-            Assert.NotNull(caughtException?.StackTrace);
-            Assert.Contains(nameof(ThrowDirectorException), caughtException?.StackTrace);
+            Assert.NotNull(caughtException.StackTrace);
+            Assert.Contains(nameof(ThrowDirectorException), caughtException.StackTrace);
         }
 
         [Fact]

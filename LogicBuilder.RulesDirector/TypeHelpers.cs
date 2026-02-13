@@ -96,12 +96,12 @@ namespace LogicBuilder.RulesDirector
                 to = to.IsNullable() ? Nullable.GetUnderlyingType(to) : to;
                 from = from.IsNullable() ? Nullable.GetUnderlyingType(from) : from;
 
-                if (NumbersDictionary.ContainsKey(to) && NumbersDictionary[to].Contains(from))
+                if (NumbersDictionary.TryGetValue(to, out HashSet<Type> toConversions) && toConversions.Contains(from))
                     return true;
             }
 
-            bool ReturnTypeValid(Type returnType) => returnType == to || (NumbersDictionary.ContainsKey(to) && NumbersDictionary[to].Contains(returnType));
-            bool ParameterValid(Type parameterType) => (parameterType == from) || (NumbersDictionary.ContainsKey(parameterType) && NumbersDictionary[parameterType].Contains(from));
+            bool ReturnTypeValid(Type returnType) => returnType == to || (NumbersDictionary.TryGetValue(to, out HashSet<Type> toConversions) && toConversions.Contains(returnType));
+            bool ParameterValid(Type parameterType) => (parameterType == from) || (NumbersDictionary.TryGetValue(parameterType, out HashSet<Type> parameterTypeConversions) && parameterTypeConversions.Contains(from));
             bool MatchImplicitOperator(MethodInfo m) => m.Name == "op_Implicit"
                                                         && ReturnTypeValid(m.ReturnType)
                                                         && ParameterValid(m.GetParameters().Single().ParameterType);
