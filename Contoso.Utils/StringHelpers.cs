@@ -8,10 +8,9 @@
             {
                 return new System.Net.Mail.MailAddress(email).Address == email;
             }
-            catch
+            catch (System.FormatException)
             {
-                // If an exception is thrown, the email is not valid
-                // Intentionally catch all exceptions to return false for any invalid email format
+                // If a format-related exception is thrown, the email is not valid
                 return false;
             }
         }
