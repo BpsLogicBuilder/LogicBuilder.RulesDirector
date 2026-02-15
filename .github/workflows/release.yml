@@ -12,6 +12,7 @@ permissions:
 env:
   DOTNET_VERSION: "10.0.x"
   NODE_VERSION: "20"
+  PROJECT_NAME: "LogicBuilder.RulesDirector"
 
 jobs:
   test:
@@ -42,11 +43,17 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=cobertura /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
+        run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=cobertura /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
 
   publish-packages:
     name: Publish Package to GitHub Packages and NuGet.org
     runs-on: ubuntu-latest
+    if: github.repository_owner == 'BpsLogicBuilder'
     needs: test
 
     steps:
@@ -75,17 +82,13 @@ jobs:
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
-      - name: Make script executable
-        run: chmod +x ./Release_Pack_Push.ps1
-        shell: bash
-
       - name: Publish Packages
-        shell: pwsh
-        run: ./Release_Pack_Push.ps1
+        run: |
+          dotnet pack ${{ env.PROJECT_PATH }} --configuration Release -o ./nupkg --no-build
+          dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }} --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }}--skip-duplicate --source ${{ env.NUGET_URL }} --api-key ${{ env.NUGET_API_KEY }}
         env:
-          REPO: ${{ github.repository }}
-          REPO_OWNER: ${{ github.repository_owner }}
           NUGET_URL: 'https://api.nuget.org/v3/index.json'
-          GITHUB_NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NUGET_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
-          PROJECT_NAME: 'LogicBuilder.RulesDirector'
+          NUGET_PACKAGE_PATH: "${{ format('./nupkg/{0}.*.nupkg', env.PROJECT_NAME) }}"
+          PROJECT_PATH: "${{ format('./{0}/{0}.csproj', env.PROJECT_NAME) }}"
