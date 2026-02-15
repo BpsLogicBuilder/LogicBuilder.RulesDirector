@@ -1,5 +1,10 @@
 # LogicBuilder.RulesDirector
 
+[![Build Status](https://github.com/BpsLogicBuilder/LogicBuilder.RulesDirector/actions/workflows/ci.yml/badge.svg)](https://github.com/BpsLogicBuilder/LogicBuilder.RulesDirector/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/BpsLogicBuilder/LogicBuilder.RulesDirector/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/BpsLogicBuilder/LogicBuilder.RulesDirector/actions/workflows/github-code-scanning/codeql)
+[![codecov](https://codecov.io/gh/BpsLogicBuilder/LogicBuilder.RulesDirector/graph/badge.svg?token=A0QOZI37NA)](https://codecov.io/gh/BpsLogicBuilder/LogicBuilder.RulesDirector)
+[![NuGet](https://img.shields.io/nuget/v/LogicBuilder.RulesDirector.svg)](https://www.nuget.org/packages/LogicBuilder.RulesDirector)
+
 A .NET Standard 2.0 library that manages flow state and rule engine execution for applications built with [LogicBuilder](https://github.com/BpsLogicBuilder/LogicBuilder).
 
 ## Overview
