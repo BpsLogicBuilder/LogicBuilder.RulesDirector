@@ -1,3 +1,4 @@
+* 2026-04-17 - AB#49: Update SonarScanner to exclude specific folders from coverage.
 * 2026-04-17 - AB#49: Favor GitHub Actions over automatic for SonarCloud analysis.
 * 2026-04-17 - AB#49: Stricter TryParse reflection; remove unused using.
 * 2026-04-17 - AB#49: Sonar recommendations and code coverage.
