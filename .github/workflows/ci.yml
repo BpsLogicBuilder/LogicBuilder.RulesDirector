@@ -6,10 +6,6 @@ on:
   pull_request:
     branches: [ master ]
 
-permissions:
-    contents: read
-    packages: write
-
 env:
   DOTNET_VERSION: "10.0.x"
   NODE_VERSION: "20"
@@ -19,6 +15,9 @@ jobs:
   test:
     name: Test
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
 
     steps:
       - name: Checkout repository
@@ -47,7 +46,7 @@ jobs:
         run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=cobertura /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
 
       - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -55,6 +54,9 @@ jobs:
     name: Publish to GitHub Packages
     runs-on: ubuntu-latest
     if: github.repository_owner == 'BpsLogicBuilder'
+    permissions:
+      contents: read
+      packages: write
     needs: test
 
     steps:

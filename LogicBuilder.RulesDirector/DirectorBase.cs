@@ -160,7 +160,7 @@ namespace LogicBuilder.RulesDirector
                 if (_driver.Length == 0)
                     return page.ToString(CultureInfo.CurrentCulture);
 
-                string[] driverValues = _driver.Split(['P']);
+                string[] driverValues = _driver.Split('P');
                 return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[1];
             }
         }
@@ -176,7 +176,7 @@ namespace LogicBuilder.RulesDirector
                 if (_driver.Length == 0)
                     return page.ToString(CultureInfo.CurrentCulture);
 
-                string[] driverValues = _driver.Split(['P']);
+                string[] driverValues = _driver.Split('P');
                 return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[0];
             }
         }

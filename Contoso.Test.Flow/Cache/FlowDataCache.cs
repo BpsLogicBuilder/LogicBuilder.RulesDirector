@@ -6,7 +6,7 @@ namespace Contoso.Test.Flow.Cache
 {
     public class FlowDataCache
     {
-        public BaseRequest Request { get; set; }
+        public IBaseRequest Request { get; set; }
         public BaseResponse Response { get; set; }
         public Dictionary<string, object> Items { get; set; } = [];
     }

@@ -45,7 +45,7 @@ namespace Contoso.Test.Flow.Rules
             List<System.Reflection.Assembly> assemblies =
             [
                 typeof(Utils.TypeHelpers).Assembly,
-                typeof(Business.Requests.BaseRequest).Assembly,
+                typeof(Business.Requests.IBaseRequest).Assembly,
                 typeof(Domain.BaseModelClass).Assembly,
                 typeof(LogicBuilder.RulesDirector.DirectorBase).Assembly,
                 typeof(string).Assembly

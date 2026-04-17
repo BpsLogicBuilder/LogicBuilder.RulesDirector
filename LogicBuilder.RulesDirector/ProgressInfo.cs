@@ -4,7 +4,7 @@ using System.Globalization;
 namespace LogicBuilder.RulesDirector
 {
     [Serializable]
-    public class ProgressInfo(string description) : IEquatable<ProgressInfo>, IComparable<ProgressInfo>
+    public sealed class ProgressInfo(string description) : IEquatable<ProgressInfo>, IComparable<ProgressInfo>
     {
 
         #region Variables
@@ -28,9 +28,14 @@ namespace LogicBuilder.RulesDirector
         public bool Equals(ProgressInfo other)
         {
             if (other == null)
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.invalidArgumentFormat, "{9F3F5272-92FC-4d9d-A9E3-6D5F313308A1}"));
+                return false;
 
             return this.description.Equals(other.description);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as ProgressInfo);
         }
         #endregion
 
@@ -38,7 +43,7 @@ namespace LogicBuilder.RulesDirector
         public int CompareTo(ProgressInfo other)
         {
             if (other == null)
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Strings.invalidArgumentFormat, "{F03ADAE7-1CD3-4992-A9C8-221D275E85CA}"));
+                return 1;
 
             return this.description.CompareTo(other.description);
         }
@@ -48,6 +53,53 @@ namespace LogicBuilder.RulesDirector
         public override string ToString()
         {
             return string.Format(CultureInfo.CurrentCulture, Strings.variableTypeToStringFormat, this.description, this.dateAndTime.ToString("T", CultureInfo.CurrentCulture));
+        }
+
+        public override int GetHashCode()
+        {
+            return description.GetHashCode();
+        }
+
+        public static bool operator ==(ProgressInfo left, ProgressInfo right)
+        {
+            if (ReferenceEquals(left, right))
+                return true;
+            if (left is null)
+                return false;
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(ProgressInfo left, ProgressInfo right)
+        {
+            return !(left == right);
+        }
+
+        public static bool operator <(ProgressInfo left, ProgressInfo right)
+        {
+            if (left is null)
+                return right is not null;
+            return left.CompareTo(right) < 0;
+        }
+
+        public static bool operator <=(ProgressInfo left, ProgressInfo right)
+        {
+            if (left is null)
+                return true;
+            return left.CompareTo(right) <= 0;
+        }
+
+        public static bool operator >(ProgressInfo left, ProgressInfo right)
+        {
+            if (left is null)
+                return false;
+            return left.CompareTo(right) > 0;
+        }
+
+        public static bool operator >=(ProgressInfo left, ProgressInfo right)
+        {
+            if (left is null)
+                return right is null;
+            return left.CompareTo(right) >= 0;
         }
         #endregion Methods
     }

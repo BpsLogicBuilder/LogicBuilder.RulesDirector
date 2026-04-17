@@ -232,7 +232,6 @@ namespace LogicBuilder.RulesDirector.Tests
             serviceProvider = new ServiceCollection()
                 .AddLogging()
                 .AddTransient<IFlowManager, FlowManager>()
-                .AddTransient<FlowActivityFactory, FlowActivityFactory>()
                 .AddTransient<DirectorFactory, DirectorFactory>()
                 .AddTransient<ICustomActions, CustomActions>()
                 .AddSingleton<FlowDataCache, FlowDataCache>()

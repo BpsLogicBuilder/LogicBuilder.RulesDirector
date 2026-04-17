@@ -102,7 +102,7 @@ namespace LogicBuilder.RulesDirector.Tests
 
             //assert
             Assert.True(result);
-            Assert.Equal(true, parsed);
+            Assert.True((bool)parsed);
         }
 
         [Fact]

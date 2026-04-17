@@ -90,7 +90,7 @@ namespace LogicBuilder.RulesDirector.Tests
             var flowBackupData = new FlowBackupData("driver", "selection", new Stack(), new Stack(), "begin", "end");
 
             //act
-            bool result = flowBackupData.Equals(null);
+            bool result = flowBackupData.Equals((object?)null);
 
             //assert
             Assert.False(result);

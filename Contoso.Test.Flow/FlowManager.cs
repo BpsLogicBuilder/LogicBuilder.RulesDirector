@@ -12,7 +12,6 @@ namespace Contoso.Test.Flow
     {
         public FlowManager(ICustomActions customActions,
             DirectorFactory directorFactory,
-            FlowActivityFactory flowActivityFactory,
             ILogger<FlowManager> logger, 
             Progress progress,
             FlowDataCache flowDataCache)
@@ -22,7 +21,7 @@ namespace Contoso.Test.Flow
             this.Progress = progress;
             this.FlowDataCache = flowDataCache;
             this.Director = directorFactory.Create(this);
-            this.FlowActivity = flowActivityFactory.Create(this);
+            this.FlowActivity = FlowActivityFactory.Create(this);
         }
 
         public IFlowActivity FlowActivity { get; }

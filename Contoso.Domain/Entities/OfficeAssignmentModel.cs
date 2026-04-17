@@ -36,20 +36,5 @@ namespace Contoso.Domain.Entities
 				OnPropertyChanged();
 			}
 		}
-
-		//private InstructorModel _instructor;
-		//[AlsoKnownAs("OfficeAssignment_Instructor")]
-		//public InstructorModel Instructor
-		//{
-		//	get { return _instructor; }
-		//	set
-		//	{
-		//		if (_instructor == value)
-		//			return;
-
-		//		_instructor = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
     }
 }

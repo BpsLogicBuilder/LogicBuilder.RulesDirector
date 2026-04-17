@@ -81,35 +81,5 @@ namespace Contoso.Domain.Entities
 				OnPropertyChanged();
 			}
 		}
-
-		//private InstructorModel _instructor;
-		//[AlsoKnownAs("CourseAssignment_Instructor")]
-		//public InstructorModel Instructor
-		//{
-		//	get { return _instructor; }
-		//	set
-		//	{
-		//		if (_instructor == value)
-		//			return;
-
-		//		_instructor = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
-
-		//private CourseModel _course;
-		//[AlsoKnownAs("CourseAssignment_Course")]
-		//public CourseModel Course
-		//{
-		//	get { return _course; }
-		//	set
-		//	{
-		//		if (_course == value)
-		//			return;
-
-		//		_course = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
 	}
 }

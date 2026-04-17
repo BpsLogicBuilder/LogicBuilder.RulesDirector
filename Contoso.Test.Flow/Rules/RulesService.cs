@@ -1,5 +1,6 @@
 ﻿using Contoso.Domain.Entities;
 using LogicBuilder.Workflow.Activities.Rules;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
@@ -104,7 +105,12 @@ namespace Contoso.Test.Flow.Rules
         {
             using Stream platformStream = assembly.GetManifestResourceStream(file);
             byte[] byteArray = new byte[platformStream.Length];
-            platformStream.Read(byteArray, 0, byteArray.Length);
+            using var memoryStream = new MemoryStream();
+            int read;
+            while ((read = platformStream.Read(byteArray, 0, byteArray.Length)) > 0)
+            {
+                memoryStream.Write(byteArray, 0, read);
+            }
             return byteArray;
         }
     }

@@ -121,21 +121,6 @@ namespace Contoso.Domain.Entities
 			}
 		}
 
-		//private InstructorModel _administrator;
-		//[AlsoKnownAs("Department_Administrator")]
-		//public InstructorModel Administrator
-		//{
-		//	get { return _administrator; }
-		//	set
-		//	{
-		//		if (_administrator == value)
-		//			return;
-
-		//		_administrator = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
-
 		private ICollection<CourseModel> _courses;
 		[ListEditorControl(ListControlType.HashSetForm)]
 		[AlsoKnownAs("Department_Courses")]
