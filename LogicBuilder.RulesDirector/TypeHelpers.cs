@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 
@@ -37,7 +36,7 @@ namespace LogicBuilder.RulesDirector
             if (type.IsNullable())
                 type = Nullable.GetUnderlyingType(type);
 
-            MethodInfo method = type.GetMethods().SingleOrDefault(IsTryParseMethod);
+            MethodInfo method = type.GetMethods().Single(IsTryParseMethod);
 
             object[] args = [toParse, null];
             bool success = (bool)method.Invoke(null, args);

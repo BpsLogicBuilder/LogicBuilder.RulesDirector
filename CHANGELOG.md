@@ -1,4 +1,5 @@
-* 2036=04-17 - AB#49: Sonar recommendations and code coverage.
+* 2026-04-17 - AB#49: Stricter TryParse reflection; remove unused using.
+* 2026-04-17 - AB#49: Sonar recommendations and code coverage.
 * 2026-02-15 - AB#41 Adding status badges. (#4)
 * 2026-02-13 - AB#31 Code Quality fixes. (#3)
 * 2026-02-13 - AB#31 Recommendations from code scanning. (#2)
