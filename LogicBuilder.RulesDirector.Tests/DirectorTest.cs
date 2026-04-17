@@ -1,9 +1,14 @@
+using Contoso.Domain.Entities;
+using Contoso.Test.Business.Requests;
 using Contoso.Test.Flow;
 using Contoso.Test.Flow.Cache;
 using Contoso.Test.Flow.Rules;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Linq;
 
 namespace LogicBuilder.RulesDirector.Tests
 {
@@ -199,6 +204,240 @@ namespace LogicBuilder.RulesDirector.Tests
             Assert.False(DirectorBase.VariablesUpdated);
         }
         #endregion VariablesUpdated Tests
+
+        #region CopyStack Test
+        [Fact]
+        public void CopyStack_CopiesStateForExistingState()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act - get backup data
+            flowManager.Start("savestudent");
+            FlowBackupData backupData = (FlowBackupData)flowManager.Director.FlowBackupData;
+
+            //assert
+            Assert.Single(backupData.CallingModuleDriverStack);
+            Assert.Single(backupData.CallingModuleDriverStack);
+        }
+        #endregion CopyStack Test
+
+        #region UpdateProgressList Test
+        [Fact]
+        public void UpdateProgressList_ReturnsForDuplicateProgressItem()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act
+            flowManager.Start("savestudent");
+            int count = flowManager.Progress.ProgressItems.Count;
+            flowManager.Director.UpdateProgressList("NewValue");
+            flowManager.Director.UpdateProgressList("NewValue");
+
+            //assert
+            Assert.Equal(count + 1, flowManager.Progress.ProgressItems.Count);
+        }
+        #endregion UpdateProgressList Test
+
+        #region CurrentShapeIndex Test
+        [Fact]
+        public void FlowStatus_CurrentModuleIfCurrentDriverIsEmpty()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act
+            flowManager.Start("savestudent");
+            flowManager.Director.Driver = "";
+            string flowStatus = flowManager.Director.FlowStatus;
+
+            //assert
+            Assert.Equal(string.Format(CultureInfo.CurrentCulture, Strings.flowStatusFormatInitial, "validatestudent"), flowStatus);
+        }
+
+        [Fact]
+        public void FlowStatus_ReturnsZeroForPageNumberIf_CurrentDriverConnotBeSplit()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act
+            flowManager.Start("savestudent");
+            flowManager.Director.Driver = "invalidDriver";
+            string flowStatus = flowManager.Director.FlowStatus;
+
+            //assert
+            Assert.Equal(string.Format(CultureInfo.CurrentCulture, Strings.flowStatusFormat, "validatestudent", 0, 0), flowStatus);
+        }
+        #endregion CurrentShapeIndex Test
+
+        #region ExecuteRulesEngine Test
+        [Fact]
+        public void ExecuteRuleEngine_DoesNotChangeState_WithNoAdditionalChanges()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act
+            flowManager.Start("savestudent");
+            FlowBackupData backupData = (FlowBackupData)flowManager.Director.FlowBackupData;
+            Assert.Single(backupData.CallingModuleStack);
+            Assert.Single(backupData.CallingModuleDriverStack);
+            flowManager.Director.ExecuteRulesEngine();
+
+            //assert
+            Assert.Single(backupData.CallingModuleStack);
+            Assert.Single(backupData.CallingModuleDriverStack);
+        }
+
+        [Fact]
+        public void ExecuteRuleEngine_ThrowsExceptionIfRulesEngineNotFound()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act
+            flowManager.Start("savestudent");
+            flowManager.Director.SetModuleName("invalidModule");
+
+            //assert
+            Assert.Throws<InvalidOperationException>(flowManager.Director.ExecuteRulesEngine);
+        }
+        #endregion ExecuteRulesEngine Test
+
+        #region StartInitialFlow Test
+        [Fact]
+        public void StartInitialFlow_ThrowsExceptionIfModuleNameIsNull()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+
+            //act && assert
+            Assert.Throws<ArgumentException>(() => flowManager.Director.StartInitialFlow(null));
+        }
+
+        [Fact]
+        public void StartInitialFlow_ThrowsExceptionIfRulesEngineNotFound()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+
+            //act && assert
+            Assert.Throws<InvalidOperationException>(() => flowManager.Director.StartInitialFlow("invalidModule"));
+        }
+        #endregion StartInitialFlow Test
+
+        #region SetModuleName Tests
+        [Fact]
+        public void SetModuleBeginNameThrows_IfRulesEngineNotFound()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            DirectorBase director = flowManager.Director;
+
+            //act & assert
+            Assert.Throws<InvalidOperationException>(() => director.ModuleBeginName = "invalidModule");
+        }
+        #endregion SetModuleName Tests
+
+        #region SetModuleName Tests
+        [Fact]
+        public void SetModuleEndNameThrows_IfRulesEngineNotFound()
+        {
+            //arrange
+            IFlowManager flowManager = serviceProvider.GetRequiredService<IFlowManager>();
+            flowManager.FlowDataCache.Request = new SaveEntityRequest
+            {
+                Entity = new StudentModel
+                {
+                    EntityState = LogicBuilder.Domain.EntityStateType.Modified,
+                    FirstName = "",
+                    LastName = "",
+                    EnrollmentDate = default
+                }
+            };
+
+            //act
+            flowManager.Start("savestudent");
+            FlowBackupData backupData = (FlowBackupData)flowManager.Director.FlowBackupData;
+            Assert.Single(backupData.CallingModuleStack);
+            Assert.Single(backupData.CallingModuleDriverStack);
+            backupData = new FlowBackupData
+            (
+                backupData.Driver,
+                backupData.Selection,
+                backupData.CallingModuleDriverStack,
+                new System.Collections.Stack(new List<string> { "invalidModule" }),
+                backupData.ModuleBeginName,
+                backupData.ModuleEndName
+            );
+            flowManager.Director.ResetFlowValuesOnBackup(backupData);
+
+            //act & assert
+            Assert.Throws<InvalidOperationException>(() => flowManager.Director.ModuleEndName = "savestudent");
+        }
+        #endregion SetModuleName Tests
 
         #region Helpers
         [MemberNotNull(nameof(serviceProvider))]

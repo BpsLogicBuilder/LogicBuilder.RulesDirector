@@ -136,8 +136,22 @@ namespace LogicBuilder.RulesDirector
             get
             {
                 return this._driver.Length == 0
-              ? string.Format(CultureInfo.CurrentCulture, Strings.flowStatusFormatInitial, ModuleName)
-              : string.Format(CultureInfo.CurrentCulture, Strings.flowStatusFormat, ModuleName, CurrentPage, CurrentShapeIndex);
+                  ? string.Format(CultureInfo.CurrentCulture, Strings.flowStatusFormatInitial, ModuleName)
+                  : string.Format(CultureInfo.CurrentCulture, Strings.flowStatusFormat, ModuleName, GetCurrentPage(), GetCurrentShapeIndex());
+
+                string GetCurrentShapeIndex()
+                {
+                    int shapeIndex = 0;
+                    string[] driverValues = _driver.Split('P');
+                    return driverValues.Length < 2 ? shapeIndex.ToString(CultureInfo.CurrentCulture) : driverValues[0];
+                }
+
+                string GetCurrentPage()
+                {
+                    int page = 0;
+                    string[] driverValues = _driver.Split('P');
+                    return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[1];
+                }
             }
         }
 
@@ -147,38 +161,6 @@ namespace LogicBuilder.RulesDirector
         private string ModuleName
         {
             get { return _moduleBeginName; }
-        }
-
-        /// <summary>
-        /// Index of the index of the Visio page where the last rule activated is defined
-        /// </summary>
-        private string CurrentPage
-        {
-            get
-            {
-                int page = 0;
-                if (_driver.Length == 0)
-                    return page.ToString(CultureInfo.CurrentCulture);
-
-                string[] driverValues = _driver.Split('P');
-                return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[1];
-            }
-        }
-
-        /// <summary>
-        /// Index of the index of the Visio shape where the last rule activated is defined
-        /// </summary>
-        private string CurrentShapeIndex
-        {
-            get
-            {
-                int page = 0;
-                if (_driver.Length == 0)
-                    return page.ToString(CultureInfo.CurrentCulture);
-
-                string[] driverValues = _driver.Split('P');
-                return driverValues.Length < 2 ? page.ToString(CultureInfo.CurrentCulture) : driverValues[0];
-            }
         }
 
         /// <summary>

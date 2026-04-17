@@ -125,7 +125,7 @@ namespace LogicBuilder.RulesDirector.Tests
             DateTime result = ResourcesHelper<DateTime>.GetResource(shortValue, director);
 
             //assert
-            Assert.Equal(new DateTime(2026, 2, 13), result);
+            Assert.Equal(new DateTime(2026, 2, 13, 0, 0, 0, DateTimeKind.Unspecified), result);
         }
 
         [Fact]

@@ -34,7 +34,7 @@ namespace LogicBuilder.RulesDirector.Tests.Flow
                     EntityState = LogicBuilder.Domain.EntityStateType.Modified,
                     FirstName = "John",
                     LastName = "Hopkins",
-                    HireDate = new DateTime(2018, 3, 3)
+                    HireDate = new DateTime(2018, 3, 3, 0, 0, 0, DateTimeKind.Unspecified)
                 }
             };
 

@@ -62,7 +62,7 @@ namespace Contoso.Test.Flow
                     Success = false,
                     ErrorMessages = [ex.Message]
                 };
-                logger.LogWarning(0, string.Format("Progress Start {0}", JsonSerializer.Serialize(this.Progress)));
+                logger.LogWarning(0, "Progress Start {Ptogress}", JsonSerializer.Serialize(this.Progress));
                 this.logger.LogError(ex, ex.Message);
             }
 
