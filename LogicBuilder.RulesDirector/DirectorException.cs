@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.Serialization;
 
 namespace LogicBuilder.RulesDirector
@@ -19,19 +20,14 @@ namespace LogicBuilder.RulesDirector
         public DirectorException(string message)
             : base(message)
         {
-            //
-            // TODO: Add constructor logic here
-            //
         }
 
         public DirectorException(string message, Exception ex)
             : base(message, ex)
         {
-            //
-            // TODO: Add constructor logic here
-            //
         }
 
+        [ExcludeFromCodeCoverage]
         protected DirectorException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {

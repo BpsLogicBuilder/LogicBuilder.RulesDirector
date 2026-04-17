@@ -1,4 +1,5 @@
 ﻿using LogicBuilder.Attributes;
+using System;
 
 
 namespace Contoso.Domain.Entities
@@ -77,12 +78,24 @@ namespace Contoso.Domain.Entities
 			get { return _numericValue; }
 			set
 			{
-				if (_numericValue == value)
+                if (NoChanges())
 					return;
 
 				_numericValue = value;
 				OnPropertyChanged();
-			}
+
+                bool NoChanges()
+				{
+                    if (!_numericValue.HasValue && !value.HasValue)
+                        return true;
+
+                    if (_numericValue.HasValue != value.HasValue)
+                        return false;
+
+                    return Math.Abs(_numericValue.Value - value.Value) < double.Epsilon;
+                }
+
+            }
 		}
 
 		private bool? _booleanValue;

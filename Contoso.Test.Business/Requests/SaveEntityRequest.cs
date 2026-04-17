@@ -2,7 +2,7 @@
 
 namespace Contoso.Test.Business.Requests
 {
-    public class SaveEntityRequest : BaseRequest
+    public class SaveEntityRequest : IBaseRequest
     {
         public EntityModelBase Entity { get; set; }
     }

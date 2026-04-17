@@ -87,37 +87,6 @@ namespace Contoso.Domain.Entities
 			}
 		}
 
-		//private DepartmentModel _department;
-		//[AlsoKnownAs("Course_Department")]
-		//public DepartmentModel Department
-		//{
-		//	get { return _department; }
-		//	set
-		//	{
-		//		if (_department == value)
-		//			return;
-
-		//		_department = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
-
-		//private ICollection<EnrollmentModel> _enrollments;
-		//[ListEditorControl(ListControlType.HashSetForm)]
-		//[AlsoKnownAs("Course_Enrollments")]
-		//public ICollection<EnrollmentModel> Enrollments
-		//{
-		//	get { return _enrollments; }
-		//	set
-		//	{
-		//		if (_enrollments == value)
-		//			return;
-
-		//		_enrollments = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
-
 		private ICollection<CourseAssignmentModel> _assignments;
 		[ListEditorControl(ListControlType.HashSetForm)]
 		[AlsoKnownAs("Course_Assignments")]

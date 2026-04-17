@@ -82,13 +82,58 @@ namespace LogicBuilder.RulesDirector.Tests
         }
 
         [Fact]
-        public void Equals_ThrowsInvalidOperationExceptionForNullArgument()
+        public void Equals_ReturnsFalseForNullArgument()
         {
             //arrange
             var progressInfo = new ProgressInfo("Test");
 
-            //act & assert
-            Assert.Throws<InvalidOperationException>(() => progressInfo?.Equals(null));
+            //act
+            bool result = progressInfo.Equals(null);
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Equals_ReturnsTrueForSameDescription_WithObjectParameterOverride()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1.Equals((object)progressInfo2);
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void Equals_ReturnsFalseForDifferentDescription_WithObjectParameterOverride()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Description 1");
+            var progressInfo2 = new ProgressInfo("Description 2");
+
+            //act
+            bool result = progressInfo1.Equals((object)progressInfo2);
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void Equals_ReturnsFalseForNullArgument_WithObjectParameterOverride()
+        {
+            //arrange
+            var progressInfo = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo.Equals((object?)null);
+
+            //assert
+            Assert.False(result);
         }
 
         [Fact]
@@ -135,13 +180,16 @@ namespace LogicBuilder.RulesDirector.Tests
         }
 
         [Fact]
-        public void CompareTo_ThrowsInvalidOperationExceptionForNullArgument()
+        public void CompareTo_ReturnsOneForNullArgument()
         {
             //arrange
             var progressInfo = new ProgressInfo("Test");
 
-            //act & assert
-            Assert.Throws<InvalidOperationException>(() => progressInfo.CompareTo(null));
+            //act
+            int result = progressInfo.CompareTo(null);
+
+            //assert
+            Assert.Equal(1, result);
         }
 
         [Fact]
@@ -174,6 +222,463 @@ namespace LogicBuilder.RulesDirector.Tests
             //assert
             Assert.Contains(description, result);
             Assert.Contains(expectedTime, result);
+        }
+
+        [Fact]
+        public void GetHashCode_ReturnsSameHashCodeForSameDescription()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            int hashCode1 = progressInfo1.GetHashCode();
+            int hashCode2 = progressInfo2.GetHashCode();
+
+            //assert
+            Assert.Equal(hashCode1, hashCode2);
+        }
+
+        [Fact]
+        public void GetHashCode_ReturnsDifferentHashCodeForDifferentDescription()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Description 1");
+            var progressInfo2 = new ProgressInfo("Description 2");
+
+            //act
+            int hashCode1 = progressInfo1.GetHashCode();
+            int hashCode2 = progressInfo2.GetHashCode();
+
+            //assert
+            Assert.NotEqual(hashCode1, hashCode2);
+        }
+
+        [Fact]
+        public void EqualityOperator_ReturnsTrueForSameDescription()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1 == progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void EqualityOperator_ReturnsTrueForSameReference()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Test");
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 == progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void EqualityOperator_ReturnsTrueForBothNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 == progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void EqualityOperator_ReturnsFalseForDifferentDescription()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Description 1");
+            var progressInfo2 = new ProgressInfo("Description 2");
+
+            //act
+            bool result = progressInfo1 == progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void EqualityOperator_ReturnsFalseWhenLeftIsNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 == progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void EqualityOperator_ReturnsFalseWhenRightIsNull()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Test");
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 == progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void InequalityOperator_ReturnsFalseForSameDescription()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1 != progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void InequalityOperator_ReturnsTrueForDifferentDescription()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Description 1");
+            var progressInfo2 = new ProgressInfo("Description 2");
+
+            //act
+            bool result = progressInfo1 != progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void InequalityOperator_ReturnsTrueWhenLeftIsNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 != progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void InequalityOperator_ReturnsTrueWhenRightIsNull()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Test");
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 != progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void LessThanOperator_ReturnsTrueWhenLeftIsLessThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("AAA");
+            var progressInfo2 = new ProgressInfo("ZZZ");
+
+            //act
+            bool result = progressInfo1 < progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void LessThanOperator_ReturnsFalseWhenLeftIsGreaterThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("ZZZ");
+            var progressInfo2 = new ProgressInfo("AAA");
+
+            //act
+            bool result = progressInfo1 < progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void LessThanOperator_ReturnsFalseWhenEqual()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1 < progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void LessThanOperator_ReturnsTrueWhenLeftIsNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 < progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void LessThanOperator_ReturnsFalseWhenBothAreNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 < progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void LessThanOperator_ReturnsFalseWhenRightIsNull()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Test");
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 < progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void LessThanOrEqualOperator_ReturnsTrueWhenLeftIsLessThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("AAA");
+            var progressInfo2 = new ProgressInfo("ZZZ");
+
+            //act
+            bool result = progressInfo1 <= progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void LessThanOrEqualOperator_ReturnsTrueWhenEqual()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1 <= progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void LessThanOrEqualOperator_ReturnsFalseWhenLeftIsGreaterThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("ZZZ");
+            var progressInfo2 = new ProgressInfo("AAA");
+
+            //act
+            bool result = progressInfo1 <= progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void LessThanOrEqualOperator_ReturnsTrueWhenLeftIsNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 <= progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GreaterThanOperator_ReturnsTrueWhenLeftIsGreaterThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("ZZZ");
+            var progressInfo2 = new ProgressInfo("AAA");
+
+            //act
+            bool result = progressInfo1 > progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GreaterThanOperator_ReturnsFalseWhenLeftIsLessThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("AAA");
+            var progressInfo2 = new ProgressInfo("ZZZ");
+
+            //act
+            bool result = progressInfo1 > progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void GreaterThanOperator_ReturnsFalseWhenEqual()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1 > progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void GreaterThanOperator_ReturnsFalseWhenLeftIsNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 > progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void GreaterThanOrEqualOperator_ReturnsTrueWhenLeftIsGreaterThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("ZZZ");
+            var progressInfo2 = new ProgressInfo("AAA");
+
+            //act
+            bool result = progressInfo1 >= progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GreaterThanOrEqualOperator_ReturnsTrueWhenEqual()
+        {
+            //arrange
+            string description = "Same description";
+            var progressInfo1 = new ProgressInfo(description);
+            var progressInfo2 = new ProgressInfo(description);
+
+            //act
+            bool result = progressInfo1 >= progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GreaterThanOrEqualOperator_ReturnsFalseWhenLeftIsLessThanRight()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("AAA");
+            var progressInfo2 = new ProgressInfo("ZZZ");
+
+            //act
+            bool result = progressInfo1 >= progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void GreaterThanOrEqualOperator_ReturnsFalseWhenLeftIsNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            var progressInfo2 = new ProgressInfo("Test");
+
+            //act
+            bool result = progressInfo1 >= progressInfo2;
+
+            //assert
+            Assert.False(result);
+        }
+
+        [Fact]
+        public void GreaterThanOrEqualOperator_ReturnsTrueWhenBothAreNull()
+        {
+            //arrange
+            ProgressInfo? progressInfo1 = null;
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 >= progressInfo2;
+
+            //assert
+            Assert.True(result);
+        }
+
+        [Fact]
+        public void GreaterThanOrEqualOperator_ReturnsTrueWhenRightIsNull()
+        {
+            //arrange
+            var progressInfo1 = new ProgressInfo("Test");
+            ProgressInfo? progressInfo2 = null;
+
+            //act
+            bool result = progressInfo1 >= progressInfo2;
+
+            //assert
+            Assert.True(result);
         }
     }
 }

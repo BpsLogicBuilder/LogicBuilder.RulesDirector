@@ -4,7 +4,7 @@ using System.Collections;
 namespace LogicBuilder.RulesDirector
 {
     [Serializable]
-    public class FlowBackupData : IEquatable<FlowBackupData>
+    public sealed class FlowBackupData : IEquatable<FlowBackupData>
     {
         internal FlowBackupData(string driver, string selection, Stack callingModuleDriverStack, Stack callingModuleStack, string moduleBeginName, string moduleEndName)
         {

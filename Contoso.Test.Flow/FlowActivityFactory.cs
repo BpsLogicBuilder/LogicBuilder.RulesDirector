@@ -2,16 +2,12 @@
 
 namespace Contoso.Test.Flow
 {
-    public class FlowActivityFactory
+    public static class FlowActivityFactory
     {
-        public FlowActivityFactory()
-        {
-        }
-
         #region Variables
         #endregion Variables
 
-        public IFlowActivity Create(IFlowManager flowManager)
+        public static IFlowActivity Create(IFlowManager flowManager)
             => new FlowActivity(flowManager);
     }
 }

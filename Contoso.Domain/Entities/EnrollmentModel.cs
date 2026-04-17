@@ -112,35 +112,5 @@ namespace Contoso.Domain.Entities
 				OnPropertyChanged();
 			}
 		}
-
-		//private CourseModel _course;
-		//[AlsoKnownAs("Enrollment_Course")]
-		//public CourseModel Course
-		//{
-		//	get { return _course; }
-		//	set
-		//	{
-		//		if (_course == value)
-		//			return;
-
-		//		_course = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
-
-		//private StudentModel _student;
-		//[AlsoKnownAs("Enrollment_Student")]
-		//public StudentModel Student
-		//{
-		//	get { return _student; }
-		//	set
-		//	{
-		//		if (_student == value)
-		//			return;
-
-		//		_student = value;
-		//		OnPropertyChanged();
-		//	}
-		//}
 	}
 }
