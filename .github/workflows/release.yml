@@ -6,7 +6,7 @@ on:
 
 env:
   DOTNET_VERSION: "10.0.x"
-  NODE_VERSION: "20"
+  NODE_VERSION: "22.x"
   PROJECT_NAME: "LogicBuilder.RulesDirector"
 
 jobs:
@@ -41,7 +41,7 @@ jobs:
         run: dotnet build --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=cobertura /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
+        run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=opencover /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
@@ -87,10 +87,11 @@ jobs:
       - name: Publish Packages
         run: |
           dotnet pack ${{ env.PROJECT_PATH }} --configuration Release -o ./nupkg --no-build
-          dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }} --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }} --skip-duplicate --api-key ${{ env.GITHUB_TOKEN }}
           dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }}--skip-duplicate --source ${{ env.NUGET_URL }} --api-key ${{ env.NUGET_API_KEY }}
         env:
           NUGET_URL: 'https://api.nuget.org/v3/index.json'
           NUGET_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
           NUGET_PACKAGE_PATH: "${{ format('./nupkg/{0}.*.nupkg', env.PROJECT_NAME) }}"
           PROJECT_PATH: "${{ format('./{0}/{0}.csproj', env.PROJECT_NAME) }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

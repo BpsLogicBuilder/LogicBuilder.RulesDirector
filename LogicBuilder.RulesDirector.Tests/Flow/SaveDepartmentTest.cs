@@ -34,7 +34,7 @@ namespace LogicBuilder.RulesDirector.Tests.Flow
                     EntityState = LogicBuilder.Domain.EntityStateType.Modified,
                     InstructorID = 1,
                     Budget = 10000,
-                    StartDate = new DateTime(2020, 2, 2),
+                    StartDate = new DateTime(2020, 2, 2, 0, 0, 0, DateTimeKind.Unspecified),
                     Name = "Physics"
                 }
             };
@@ -61,7 +61,7 @@ namespace LogicBuilder.RulesDirector.Tests.Flow
                     EntityState = LogicBuilder.Domain.EntityStateType.Modified,
                     InstructorID = null,
                     Budget = -1,
-                    StartDate = new DateTime(),
+                    StartDate = new DateTime(1, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
                     Name = ""
                 }
             };

@@ -8,7 +8,7 @@ on:
 
 env:
   DOTNET_VERSION: "10.0.x"
-  NODE_VERSION: "20"
+  NODE_VERSION: "22.x"
   PROJECT_NAME: "LogicBuilder.RulesDirector"
 
 jobs:
@@ -36,14 +36,30 @@ jobs:
           path: ~/.nuget/packages
           key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
 
+      - name: Install SonarQube Cloud scanner
+        run: dotnet tool install --global dotnet-sonarscanner
+
       - name: Restore dependencies
         run: dotnet restore
+
+      - name: Begin SonarQube Cloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_PROJECT_KEY: "${{ format('BpsLogicBuilder_{0}', env.PROJECT_NAME) }}"
+          SONAR_ORGANIZATION_KEY: "bpslogicbuilder"
+        run: |
+          dotnet-sonarscanner begin /k:"${{ env.SONAR_PROJECT_KEY }}" /o:"${{ env.SONAR_ORGANIZATION_KEY }}" /d:sonar.qualitygate.wait=true /d:sonar.token="${{ env.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="**/TestResults/coverage.opencover.xml"
 
       - name: Build project
         run: dotnet build --no-restore --configuration Release
 
       - name: Run unit tests
-        run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutputFormat=opencover /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=cobertura /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
+        run: dotnet test --no-build --verbosity normal --configuration Release /p:CollectCoverage=true /p:Threshold=80 /p:ThresholdType=line /p:ThresholdStat=Average /p:CoverletOutput=./TestResults/ /p:ExcludeByAttribute="GeneratedCodeAttribute" /p:CoverletOutputFormat=opencover /p:Exclude="[Contoso.Domain]*%2c[Contoso.Test.Business]*%2c[Contoso.Test.Flow]*%2c[Contoso.Utils]*"
+
+      - name: End SonarQube Cloud analysis
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: dotnet-sonarscanner end /d:sonar.token="${{ env.SONAR_TOKEN }}"
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de
@@ -82,7 +98,8 @@ jobs:
       - name: Publish to GitHub Packages
         run: |
           dotnet pack ${{ env.PROJECT_PATH }} --configuration Release -o ./nupkg --no-build
-          dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }} --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }}
+          dotnet nuget push ${{ env.NUGET_PACKAGE_PATH }} --skip-duplicate --api-key ${{ env.GITHUB_TOKEN }}
         env:
           NUGET_PACKAGE_PATH: "${{ format('./nupkg/{0}.*.nupkg', env.PROJECT_NAME) }}"
           PROJECT_PATH: "${{ format('./{0}/{0}.csproj', env.PROJECT_NAME) }}"
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
